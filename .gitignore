@@ -1,0 +1,3 @@
+flux
+.streamlit/secrets.toml
+.ruff_cache
