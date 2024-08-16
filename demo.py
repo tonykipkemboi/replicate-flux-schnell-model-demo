@@ -5,7 +5,8 @@ from io import BytesIO
 from PIL import Image
 import requests
 
-st.set_page_config(page_title="Flux-Schnell Model Demo", page_icon="🎨")
+st.set_page_config(page_title="Flux-Schnell Model Demo",
+                   page_icon="🎨", layout="wide")
 
 st.title("Dream Canvas 🎨")
 
@@ -18,10 +19,10 @@ prompt = st.text_input(
     value='black forest gateau cake spelling out the words "SETHYBOO", tasty, food photography, dynamic shot',
 )
 
-
 aspect_ratio = st.sidebar.selectbox(
     "Aspect Ratio",
-    options=["1:1", "16:9", "21:9", "2:3", "3:2", "4:5", "5:4", "9:16", "9:21"],
+    options=["1:1", "16:9", "21:9", "2:3",
+             "3:2", "4:5", "5:4", "9:16", "9:21"],
 )
 
 output_format = st.sidebar.selectbox(
