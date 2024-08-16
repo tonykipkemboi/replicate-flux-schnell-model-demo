@@ -14,7 +14,7 @@ REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
 MODEL = "black-forest-labs/flux-schnell"
 client = Client(api_token=REPLICATE_API_TOKEN)
 
-prompt = st.text_input(
+prompt = st.text_area(
     "Type your prompt...",
     value='black forest gateau cake spelling out the words "SETHYBOO", tasty, food photography, dynamic shot',
 )
@@ -30,35 +30,39 @@ output_format = st.sidebar.selectbox(
 )
 
 output_quality = st.sidebar.slider(
-    "Output Quality", min_value=0, max_value=100, value=100
+    "Output Quality", min_value=0, max_value=100, value=90
 )
 
-if st.button("Generate image", type="primary"):
-    output = client.run(
-        MODEL,
-        input={
-            "prompt": prompt,
-            "num_outputs": 1,
-            "aspect_ratio": aspect_ratio,
-            "output_format": output_format,
-            "output_quality": output_quality,
-        },
-    )
+_, col2, _ = st.columns(3)
 
-    image_url = output[0]
-    image = Image.open(BytesIO(requests.get(image_url).content))
+with col2:
+    if st.button("📸 Generate", type="primary"):
+        output = client.run(
+            MODEL,
+            input={
+                "prompt": prompt,
+                "num_outputs": 1,
+                "aspect_ratio": aspect_ratio,
+                "output_format": output_format,
+                "output_quality": output_quality,
+            },
+        )
 
-    st.image(image, caption=prompt)
+        image_url = output[0]
+        image = Image.open(BytesIO(requests.get(image_url).content))
 
-    # Prepare the image for download
-    img_buffer = BytesIO()
-    image.save(img_buffer, format=output_format.upper())
-    img_buffer.seek(0)
+        st.image(image, caption=prompt)
 
-    # Add download button
-    st.download_button(
-        label="Download Image",
-        data=img_buffer,
-        file_name=f"generated_image.{output_format}",
-        mime=f"image/{output_format}",
-    )
+        # Prepare the image for download
+        img_buffer = BytesIO()
+        image.save(img_buffer, format=output_format.upper())
+        img_buffer.seek(0)
+
+        # Add download button
+        st.download_button(
+            label="Download Image",
+            data=img_buffer,
+            file_name=f"generated_image.{output_format}",
+            mime=f"image/{output_format}",
+            use_container_width=True,
+        )
