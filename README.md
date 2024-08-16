@@ -49,7 +49,7 @@ Dream Canvas is a Streamlit web application that leverages the Flux-Schnell AI m
 
 4. Customize the aspect ratio, output format, and quality using the sidebar options.
 
-5. Click the "Generate" button to create your image.
+5. Click the "📸 Generate Image" button to create your image.
 
 6. Once generated, you can view the image and download it using the provided button.
 
