@@ -7,9 +7,7 @@ import requests
 
 def main():
     st.set_page_config(
-        page_title="Flux-Schnell Model Demo",
-        page_icon="🎨",
-        layout="wide"
+        page_title="Flux-Schnell Model Demo", page_icon="🎨", layout="wide"
     )
 
     st.title("Dream Canvas 🎨")
@@ -20,14 +18,28 @@ def main():
 
     prompt = st.text_area(
         "Type your prompt...",
-        value='black forest gateau cake spelling out the words "SETHYBOO", tasty, food photography, dynamic shot',
+        value='black forest gateau cake spelling out the words "TONY", tasty, food photography, dynamic shot',
     )
 
-    aspect_ratio = st.sidebar.selectbox(
-        "Aspect Ratio",
-        options=["1:1", "16:9", "21:9", "2:3",
-                 "3:2", "4:5", "5:4", "9:16", "9:21"],
+    # Map aspect ratio descriptions to actual values
+    aspect_ratios = {
+        "1:1 (Square)": "1:1",
+        "16:9 (Widescreen, typical for HD videos)": "16:9",
+        "21:9 (Ultra-wide, cinematic)": "21:9",
+        "2:3 (Portrait, typical for photos)": "2:3",
+        "3:2 (Classic photo ratio, DSLR cameras)": "3:2",
+        "4:5 (Instagram portrait)": "4:5",
+        "5:4 (Close to square, medium format)": "5:4",
+        "9:16 (Vertical video, Instagram stories)": "9:16",
+        "9:21 (Tall, ultra portrait)": "9:21",
+    }
+
+    selected_aspect_ratio = st.sidebar.selectbox(
+        "Aspect Ratio", options=list(aspect_ratios.keys())
     )
+
+    # Retrieve the actual aspect ratio value for the model
+    aspect_ratio_value = aspect_ratios[selected_aspect_ratio]
 
     output_format = st.sidebar.selectbox(
         "Select Output Format", options=["png", "jpg", "webp"]
@@ -42,10 +54,13 @@ def main():
     with col2:
         if st.button("📸 Generate Image", type="primary", use_container_width=True):
             generate_and_display_image(
-                client, model, prompt, aspect_ratio, output_format, output_quality)
+                client, model, prompt, aspect_ratio_value, output_format, output_quality
+            )
 
 
-def generate_and_display_image(client, model, prompt, aspect_ratio, output_format, output_quality):
+def generate_and_display_image(
+    client, model, prompt, aspect_ratio, output_format, output_quality
+):
     output = client.run(
         model,
         input={
